@@ -5,7 +5,7 @@ Este proyecto configura un entorno de pruebas de rendimiento utilizando Docker C
 ## Estructura del Proyecto
 
 La estructura del proyecto es la siguiente:
-
+```bash
 performance-test/
 │
 ├── docker-compose.yml
@@ -17,7 +17,7 @@ performance-test/
 │ └── index.html
 └── ab/
 └── Dockerfile
-
+```
 
 ### Archivos
 
@@ -96,6 +96,6 @@ Para detener y eliminar los contenedores y redes creados, ejecuta:
 
 ```bash
 docker-compose down
-
+```
 # Imagen de prueba
 ![alt text](image.png)
