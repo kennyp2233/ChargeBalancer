@@ -31,6 +31,53 @@ performance-test/
 - Docker
 - Docker Compose
 
+## Explicación de Docker Compose y Dockerfiles
+
+### Docker Compose
+
+Docker Compose es una herramienta para definir y ejecutar aplicaciones Docker multi-contenedor. Utiliza un archivo YAML (`docker-compose.yml`) para configurar los servicios, redes y volúmenes necesarios para una aplicación. Con Docker Compose, puedes definir todos los servicios que tu aplicación necesita, construir sus imágenes, y levantar los contenedores con un solo comando.
+
+En este proyecto, el archivo `docker-compose.yml` define cuatro servicios:
+
+- **`web1` y `web2`**: Servicios que construyen imágenes para servidores web utilizando la configuración del directorio `web`.
+- **`nginx`**: Servicio que construye una imagen de Nginx para actuar como balanceador de carga, utilizando la configuración del directorio `nginx`.
+- **`ab`**: Servicio que construye una imagen con Apache Bench (`ab`) instalado para realizar pruebas de rendimiento.
+
+Cada servicio está conectado a una red llamada `webnet`, lo que permite la comunicación entre contenedores.
+
+### Dockerfiles
+
+Los Dockerfiles son archivos de texto que contienen instrucciones para construir una imagen Docker. Cada Dockerfile especifica cómo se debe construir la imagen, incluyendo la base de la imagen, las dependencias a instalar, y los comandos a ejecutar.
+
+En este proyecto, tienes varios Dockerfiles:
+
+- **`nginx/Dockerfile`**: Define la imagen de Nginx. Parte de la imagen base `nginx:alpine` y copia el archivo de configuración `nginx.conf` al contenedor.
+
+    ```Dockerfile
+    FROM nginx:alpine
+    COPY nginx.conf /etc/nginx/nginx.conf
+    ```
+
+- **`web/Dockerfile`**: Define la imagen para los servidores web. Utiliza la imagen base `nginx:alpine` y copia un archivo `index.html` al directorio de contenido estático de Nginx.
+
+    ```Dockerfile
+    FROM nginx:alpine
+    COPY index.html /usr/share/nginx/html/index.html
+    ```
+
+- **`ab/Dockerfile`**: Define la imagen para ejecutar Apache Bench. Parte de la imagen base `nginx:alpine` y añade `apache2-utils`, que incluye Apache Bench.
+
+    ```Dockerfile
+    FROM nginx:alpine
+    RUN apk add --no-cache apache2-utils
+    CMD ["sh", "-c", "while true; do sleep 30; done;"]
+    ```
+
+Cada Dockerfile está diseñado para crear un contenedor con la configuración y herramientas necesarias para su respectivo servicio. Al construir las imágenes a partir de estos Dockerfiles, Docker crea contenedores que proporcionan la funcionalidad definida en cada uno.
+
+Estas herramientas permiten configurar un entorno completo para pruebas de rendimiento de manera reproducible y aislada.
+
+
 ## Instalación y Ejecución
 
 1. **Clona el repositorio:**
