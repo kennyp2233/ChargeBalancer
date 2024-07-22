@@ -1,0 +1,31 @@
+version: '3.8'
+services:
+  web1:
+    build: ./web
+    networks:
+      - webnet
+
+  web2:
+    build: ./web
+    networks:
+      - webnet
+
+  nginx:
+    build: ./nginx
+    ports:
+      - "80:80"
+    depends_on:
+      - web1
+      - web2
+    networks:
+      - webnet
+
+  ab:
+    build: ./ab
+    networks:
+      - webnet
+    depends_on:
+      - nginx
+
+networks:
+  webnet:
